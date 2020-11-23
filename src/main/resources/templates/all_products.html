@@ -27,7 +27,12 @@
             <label>Максимальная цена</label>
             <input type="number" th:value="${param.max_price != null ? param.max_price : ''}" class="form-control" name="max_price">
         </div>
+        <div class="form-group">
+            <label>Наименование</label>
+            <input th:value="${param.title != null ? param.title : ''}" class="form-control" name="title">
+        </div>
         <button type="submit" class="btn btn-primary">Применить</button>
+        <a class="btn btn-secondary" th:href="@{'/products'}">Сбросить</a>
     </form>
 
     <h4>Список товаров:</h4>
@@ -55,17 +60,20 @@
         <ul class="pagination">
             <li class="page-item">
                 <a class="page-link"
-                   th:href="@{'/products/?p='+ ${products.previousOrFirstPageable().getPageNumber() + 1} + ${filterDef}}">Назад</a>
+                   th:href="@{'/products/?p='+ ${products.previousOrFirstPageable().getPageNumber() + 1} + ${filterDef}}"
+                   th:if="${not products.isFirst()}">Назад</a>
             </li>
 
             <li class="page-item" th:classappend="${products.getNumber() + 1 == i ? 'active' : ''}"
-                th:each="i : ${#numbers.sequence(1, products.getTotalPages())}">
+                th:each="i : ${#numbers.sequence(1, products.getTotalPages())}"
+                th:if="${products.getTotalPages() > 0}">
                 <a class="page-link" th:text="${i}" th:href="@{'/products/?p=' + ${i} + ${filterDef}}"></a>
             </li>
 
             <li class="page-item">
-                <a class="page-link"
-                   th:href="@{'/products/?p='+ ${products.nextOrLastPageable().getPageNumber() + 1} + ${filterDef}}">Вперед</a>
+                <a  class="page-link"
+                   th:href="@{'/products/?p='+ ${products.nextOrLastPageable().getPageNumber() + 1} + ${filterDef}}"
+                   th:if="${not products.isLast()}">Вперед</a>
             </li>
         </ul>
     </nav>
