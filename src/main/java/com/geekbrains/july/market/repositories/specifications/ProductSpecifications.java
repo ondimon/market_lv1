@@ -18,4 +18,9 @@ public class ProductSpecifications {
         return (Specification<Product>) (root, criteriaQuery, criteriaBuilder) ->
                     criteriaBuilder.like(criteriaBuilder.upper(root.get("title")), "%" + title.toUpperCase() +"%");
     }
+
+    public static Specification<Product> categoryIn(Long id) {
+        return (Specification<Product>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.isMember(id, root.get("categories"));
+    }
 }
