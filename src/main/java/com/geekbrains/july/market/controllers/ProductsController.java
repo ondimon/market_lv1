@@ -2,6 +2,7 @@ package com.geekbrains.july.market.controllers;
 
 import com.geekbrains.july.market.entities.Product;
 import com.geekbrains.july.market.repositories.specifications.ProductSpecifications;
+import com.geekbrains.july.market.services.CategoryService;
 import com.geekbrains.july.market.services.ProductsService;
 import com.geekbrains.july.market.utils.ProductFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,12 @@ import java.util.Map;
 @RequestMapping("/products")
 public class ProductsController {
     private ProductsService productsService;
+    private CategoryService categoryService;
+
+    @Autowired
+    public void setCategoryService(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     @Autowired
     public ProductsController(ProductsService productsService) {
@@ -30,6 +37,7 @@ public class ProductsController {
         ProductFilter productFilter = new ProductFilter(requestParams);
         Page<Product> products = productsService.findAll(productFilter.getSpec(), pageNumber);
         model.addAttribute("products", products);
+        model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("filterDef", productFilter.getFilterDefinition().toString());
         return "all_products";
     }

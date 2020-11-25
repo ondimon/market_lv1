@@ -29,7 +29,12 @@ public class ProductFilter {
             String title = map.get("title");
             spec = spec.and(ProductSpecifications.titleLike(title));
             filterDefinition.append("&title=").append(title);
+        }
 
+        if (map.containsKey("category") && !map.get("category").isEmpty()) {
+            Long categoryId = Long.parseLong(map.get("category"));
+            spec = spec.and(ProductSpecifications.categoryIn(categoryId));
+            filterDefinition.append("&category=").append(categoryId);
         }
     }
 }
