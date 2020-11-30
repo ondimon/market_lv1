@@ -3,12 +3,16 @@ package com.geekbrains.july.market.controllers.rest;
 import com.geekbrains.july.market.beans.Cart;
 import com.geekbrains.july.market.beans.CartItem;
 import com.geekbrains.july.market.entities.Product;
+import com.geekbrains.july.market.entities.mappers.ProductMapper;
 import com.geekbrains.july.market.exceptions.ProductNotFoundException;
 import com.geekbrains.july.market.services.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api/v1/cart")
@@ -33,13 +37,13 @@ public class CartsController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveCartProduct(@RequestBody CartItem cartItem) {
+    public ResponseEntity<?> saveCartProduct(@Validated @RequestBody CartItem cartItem) {
         cart.addProduct(getCartItemForCart(cartItem));
         return new ResponseEntity<>(cart.getProducts(), HttpStatus.CREATED);
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteCartProduct(@RequestBody CartItem cartItem) {
+    public ResponseEntity<?> deleteCartProduct(@Validated @RequestBody CartItem cartItem) {
         cart.deleteProduct(getCartItemForCart(cartItem));
         return new ResponseEntity<>(cart.getProducts(), HttpStatus.OK);
     }
@@ -49,10 +53,15 @@ public class CartsController {
         return new ResponseEntity<>(exc.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<?> handleException(MethodArgumentNotValidException exc) {
+        return new ResponseEntity<>(exc.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     private CartItem getCartItemForCart(CartItem cartItem) {
         Product product = productsService.findById(cartItem.getProduct().getId());
         int count = cartItem.getCount();
-        return  new CartItem(product,
+        return  new CartItem(ProductMapper.MAPPER.fromProduct(product),
                             count,
                         count * product.getPrice());
     }

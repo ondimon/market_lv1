@@ -12,7 +12,6 @@ import java.util.List;
 
 @EqualsAndHashCode(of = {"id"})
 @Component
-//@Scope("prototype")
 @SessionScope
 public class Cart implements Serializable {
     private Long id;
