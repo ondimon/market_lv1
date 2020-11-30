@@ -1,5 +1,6 @@
 package com.geekbrains.july.market.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ public class Category {
     @Column(name = "title")
     private String title;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "products_categories",
             joinColumns = @JoinColumn(name = "category_id"),

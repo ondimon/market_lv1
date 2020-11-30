@@ -1,6 +1,8 @@
 package com.geekbrains.july.market.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -10,6 +12,7 @@ import java.util.List;
 @Table(name = "products")
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(of = {"id"})
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +25,7 @@ public class Product {
     @Column(name = "price")
     private int price;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "products_categories",
               joinColumns = @JoinColumn(name = "product_id"),
