@@ -2,8 +2,7 @@ package com.geekbrains.july.market.controllers.rest;
 
 import com.geekbrains.july.market.beans.Cart;
 import com.geekbrains.july.market.beans.CartItem;
-import com.geekbrains.july.market.entities.Product;
-import com.geekbrains.july.market.entities.mappers.ProductMapper;
+import com.geekbrains.july.market.entities.dtos.ProductDto;
 import com.geekbrains.july.market.exceptions.ProductNotFoundException;
 import com.geekbrains.july.market.services.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,9 +58,9 @@ public class CartsController {
     }
 
     private CartItem getCartItemForCart(CartItem cartItem) {
-        Product product = productsService.findById(cartItem.getProduct().getId());
+        ProductDto product = productsService.findByIdDTO(cartItem.getProduct().getId());
         int count = cartItem.getCount();
-        return  new CartItem(ProductMapper.MAPPER.fromProduct(product),
+        return  new CartItem(product,
                             count,
                         count * product.getPrice());
     }

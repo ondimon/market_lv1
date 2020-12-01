@@ -2,6 +2,7 @@ package com.geekbrains.july.market.entities.dtos;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -9,6 +10,6 @@ import javax.validation.constraints.NotNull;
 public class ProductDto {
     @NotNull
     private Long id;
-    private String title;
+    private  String Title;
     private int price;
 }

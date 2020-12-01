@@ -1,7 +1,6 @@
 package com.geekbrains.july.market.beans;
 
 import com.geekbrains.july.market.entities.dtos.ProductDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
