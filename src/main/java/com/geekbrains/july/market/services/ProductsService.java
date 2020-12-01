@@ -1,6 +1,8 @@
 package com.geekbrains.july.market.services;
 
 import com.geekbrains.july.market.entities.Product;
+import com.geekbrains.july.market.entities.dtos.ProductDto;
+import com.geekbrains.july.market.entities.mappers.ProductMapper;
 import com.geekbrains.july.market.exceptions.ProductNotFoundException;
 import com.geekbrains.july.market.repositories.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,6 +28,11 @@ public class ProductsService {
 
     public Product findById(Long id) {
         return productsRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Can't found product with id = " + id));
+    }
+
+    public ProductDto findByIdDTO(Long id) {
+        Product product = findById(id);
+        return ProductMapper.MAPPER.fromProduct(product);
     }
 
     public List<Product> findAll() {
