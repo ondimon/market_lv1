@@ -1,9 +1,35 @@
 drop table if exists products cascade;
 drop table if exists categories cascade;
 drop table if exists products_categories cascade;
+drop table if exists users cascade;
+drop table if exists roles cascade;
+drop table if exists users_roles cascade;
+
 create table products (id bigserial, title varchar(255), description varchar(5000), price int, primary key(id));
 create table categories (id bigserial, title varchar(255));
 create table products_categories (product_id bigserial, category_id bigserial);
+create table users (
+  id                    bigserial,
+  username              varchar(30) not null,
+  password              varchar(80) not null,
+  email                 varchar(50) unique,
+  locked                boolean,
+  primary key (id)
+);
+
+create table roles (
+  id                    serial,
+  name                  varchar(50) not null,
+  primary key (id)
+);
+
+CREATE TABLE users_roles (
+  user_id               bigint not null,
+  role_id               int not null,
+  primary key (user_id, role_id),
+  foreign key (user_id) references users (id),
+  foreign key (role_id) references roles (id)
+);
 
 insert into products
 (id, title, description, price) values
@@ -46,3 +72,16 @@ insert into products_categories (product_id, category_id) values
 (5, 2),
 (6, 2),
 (7, 2);
+
+
+insert into roles (name)
+values
+('ROLE_USER'), ('ROLE_ADMIN');
+
+insert into users (username, password, email, locked)
+values
+('user', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'user@gmail.com', false),
+('admin', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'admin@gmail.com', false),
+('userlocked', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'userlocked@gmail.com', true);
+
+insert into users_roles (user_id, role_id) values (1, 1), (2, 1), (2, 2);
